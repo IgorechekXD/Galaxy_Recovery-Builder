@@ -48,9 +48,9 @@ jobs:
         mkdir workspace
         cd workspace
         echo "::set-output name=pwd::$(pwd)"
-        git config --global user.name "Zillion"
-        git config --global user.email "zillion@example.com"
-        repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+        git config --global user.name "IgorechekXD"
+        git config --global user.email "igorpetin2323@mail.ru"
+        repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
       id: pwd
           
     - name: Repo Sync
@@ -66,10 +66,8 @@ jobs:
       
     - name: Clone device tree
       run: |
-        git clone https://github.com/Galaxy-MT6768/teamwin_device_samsung_a31 -b android-12 ./device/samsung/a31
-        git clone https://github.com/Galaxy-MT6768/teamwin_device_samsung_a41xx -b android-12 ./device/samsung/a41
+        git clone https://github.com/IgorechekXD/teamwin_device_samsung_a31 -b twrp-12 ./device/samsung/a31
         chmod +x device/samsung/a31/mkbootimg
-        chmod +x device/samsung/a41/mkbootimg
       working-directory: ${{ steps.pwd.outputs.pwd }}
       continue-on-error: true
 
@@ -96,7 +94,6 @@ jobs:
         lunch twrp_a31-eng && make recoveryimage -j$(nproc --all)
         lunch twrp_a41-eng && make recoveryimage -j$(nproc --all)
         cp out/target/product/a31/recovery.tar out/target/product/a31/recovery_a31.tar
-        cp out/target/product/a41/recovery.tar out/target/product/a41/recovery_a41.tar
       working-directory: ${{ steps.pwd.outputs.pwd }}
       
     - name: Upload to Release
@@ -105,7 +102,6 @@ jobs:
         files: |
           workspace/image_info
           workspace/out/target/product/a31/recovery_a31.tar
-          workspace/out/target/product/a41/recovery_a41.tar
         name: a31_twrp-11
         tag_name: ${{ github.run_id }}
       env:
